@@ -844,7 +844,14 @@
 
     case EKEventEditViewActionSaved:
       [controller.eventStore saveEvent:controller.event span:EKSpanThisEvent error:&error];
-      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:controller.event.calendarItemIdentifier];
+      NSMutableDictionary *entry = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                                        controller.event.title, @"summary",
+                                        controller.event.calendarItemIdentifier, @"_id",
+                                        [df stringFromDate:controller.event.startDate], @"startDate",
+                                        [df stringFromDate:controller.event.endDate], @"endDate",
+                                        nil];
+      NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:entry, nil];
+      pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsArray:array];
       break;
 
     case EKEventEditViewActionDeleted:
