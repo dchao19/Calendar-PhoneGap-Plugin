@@ -853,8 +853,8 @@
                                         [df stringFromDate:controller.event.startDate], @"startDate",
                                         [df stringFromDate:controller.event.endDate], @"endDate",
                                         nil];
-      eventArray = [[NSMutableArray alloc] initWithObjects:entry, nil];
-      pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsArray:array];
+      eventArray = [[NSMutableArray alloc] initWithObjects:eventDictionary, nil];
+      pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsArray:eventArray];
       break; }
 
     case EKEventEditViewActionDeleted:
