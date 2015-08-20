@@ -836,23 +836,26 @@
 - (void) eventEditViewController:(EKEventEditViewController*)controller didCompleteWithAction:(EKEventEditViewAction) action {
   NSError *error = nil;
   CDVPluginResult *pluginResult = nil;
-
+  NSDateFormatter *df = [[NSDateFormatter alloc] init];
+  NSMutableArray *eventArray;
+  NSMutableDictionary *eventDictionary;
+  [df setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
   switch (action) {
     case EKEventEditViewActionCanceled:
       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
       break;
 
-    case EKEventEditViewActionSaved:
+    case EKEventEditViewActionSaved: {
       [controller.eventStore saveEvent:controller.event span:EKSpanThisEvent error:&error];
-      NSMutableDictionary *entry = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+      eventDictionary = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                                         controller.event.title, @"summary",
                                         controller.event.calendarItemIdentifier, @"_id",
                                         [df stringFromDate:controller.event.startDate], @"startDate",
                                         [df stringFromDate:controller.event.endDate], @"endDate",
                                         nil];
-      NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:entry, nil];
+      eventArray = [[NSMutableArray alloc] initWithObjects:entry, nil];
       pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsArray:array];
-      break;
+      break; }
 
     case EKEventEditViewActionDeleted:
       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
